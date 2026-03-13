@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CipherCanvas - Advanced Cryptography & Steganography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="orb orb-one"></div>
+  <div class="orb orb-two"></div>
+  <div class="orb orb-three"></div>
+
+  <header class="hero">
+    <p class="kicker">CipherCanvas</p>
+    <h1>Advanced Cryptography + Steganography Studio</h1>
+    <p class="subtitle">Encrypt, decrypt, and hide text or entire images inside another image with a modern browser-only toolkit.</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>Crypto Lab</h2>
+      <div class="grid-two">
+        <label>
+          Algorithm
+          <select id="algorithm">
+            <option value="aes">AES-GCM (Passphrase)</option>
+            <option value="rsa-hybrid">RSA-OAEP + AES Hybrid</option>
+            <option value="ecdh-hybrid">ECDH-P256 + AES Hybrid</option>
+            <option value="caesar">Caesar Cipher</option>
+            <option value="vigenere">Vigenere Cipher</option>
+          </select>
+        </label>
+        <label>
+          Action
+          <select id="cryptoAction">
+            <option value="encrypt">Encrypt</option>
+            <option value="decrypt">Decrypt</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="algoControls" class="controls"></div>
+
+      <label>
+        Input
+        <textarea id="cryptoInput" placeholder="Enter plaintext or ciphertext..."></textarea>
+      </label>
+
+      <div class="action-row">
+        <button id="runCrypto" class="primary">Run</button>
+        <button id="clearCrypto" class="ghost">Clear</button>
+        <button id="copyCrypto" class="ghost">Copy Output</button>
+        <button id="downloadCrypto" class="ghost">Download Output</button>
+      </div>
+
+      <label>
+        Output
+        <textarea id="cryptoOutput" readonly placeholder="Result appears here..."></textarea>
+      </label>
+    </section>
+
+    <section class="panel">
+      <h2>Text in Image Steganography</h2>
+      <p class="hint">Best results: use PNG carriers (lossless).</p>
+
+      <div class="grid-two">
+        <label>
+          Carrier Image
+          <input id="textCarrier" type="file" accept="image/*" />
+          <small id="textCapacity" class="meta">Capacity: unknown</small>
+        </label>
+        <label>
+          Decode Image
+          <input id="textDecodeImage" type="file" accept="image/*" />
+        </label>
+      </div>
+
+      <div class="preview-grid">
+        <div class="preview-card">
+          <p>Carrier Preview</p>
+          <img id="textCarrierPreview" alt="Text carrier preview" />
+        </div>
+        <div class="preview-card">
+          <p>Decode Preview</p>
+          <img id="textDecodePreview" alt="Text decode image preview" />
+        </div>
+      </div>
+
+      <label>
+        Secret Message
+        <textarea id="secretMessage" placeholder="Type text to hide in image..."></textarea>
+      </label>
+
+      <div class="grid-two">
+        <label>
+          Protect Hidden Text (AES)
+          <input id="textProtect" type="checkbox" />
+        </label>
+        <label>
+          Passphrase
+          <input id="textPassphrase" type="password" placeholder="Optional or required if protected" />
+        </label>
+      </div>
+
+      <div class="action-row">
+        <button id="hideTextBtn" class="primary">Hide Text</button>
+        <button id="extractTextBtn" class="ghost">Extract Text</button>
+        <button id="encryptThenHide" class="ghost">Encrypt -> Fill Secret Text</button>
+        <button id="extractThenLoad" class="ghost">Extract -> Load Crypto Input</button>
+      </div>
+
+      <progress id="textProgress" value="0" max="100"></progress>
+
+      <div class="result-box">
+        <p id="textStatus">Status: waiting</p>
+        <a id="downloadTextStego" class="download-link" download="stego-text.png">Download Encoded Image</a>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Image in Image Steganography</h2>
+      <p class="hint">Hide a full image file inside another image and extract it later.</p>
+
+      <div class="grid-two">
+        <label>
+          Carrier Image
+          <input id="imageCarrier" type="file" accept="image/*" />
+          <small id="imageCapacity" class="meta">Capacity: unknown</small>
+        </label>
+        <label>
+          Secret Image
+          <input id="secretImage" type="file" accept="image/*" />
+        </label>
+      </div>
+
+      <div class="preview-grid">
+        <div class="preview-card">
+          <p>Carrier Preview</p>
+          <img id="imageCarrierPreview" alt="Image carrier preview" />
+        </div>
+        <div class="preview-card">
+          <p>Secret Preview</p>
+          <img id="secretImagePreview" alt="Secret image preview" />
+        </div>
+      </div>
+
+      <div class="grid-two">
+        <label>
+          Decode Container Image
+          <input id="imageDecodeContainer" type="file" accept="image/*" />
+        </label>
+        <label>
+          Protect Hidden Image (AES)
+          <input id="imageProtect" type="checkbox" />
+        </label>
+      </div>
+
+      <label>
+        Passphrase
+        <input id="imagePassphrase" type="password" placeholder="Optional or required if protected" />
+      </label>
+
+      <div class="action-row">
+        <button id="hideImageBtn" class="primary">Hide Image</button>
+        <button id="extractImageBtn" class="ghost">Extract Image</button>
+      </div>
+
+      <progress id="imageProgress" value="0" max="100"></progress>
+
+      <div class="result-box">
+        <p id="imageStatus">Status: waiting</p>
+        <a id="downloadImageStego" class="download-link" download="stego-image.png">Download Encoded Carrier</a>
+        <a id="downloadExtractedImage" class="download-link" download="extracted-image">Download Extracted Secret</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Made for local, educational use. For production-grade security, use audited tooling and key management.</p>
+  </footer>
+
+  <script src="app.js" type="module"></script>
+</body>
+</html>
